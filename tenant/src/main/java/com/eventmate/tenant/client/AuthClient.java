@@ -1,7 +1,5 @@
 package com.eventmate.tenant.client;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,9 +19,7 @@ public class AuthClient {
         String url = authServiceUrl + userId;
         UpdateTenantRequest request = new UpdateTenantRequest(tenantId);
 
-        HttpHeaders headers = new HttpHeaders();
-
-        HttpEntity<UpdateTenantRequest> requestEntity = new HttpEntity<>(request, headers);
-        restTemplate.postForObject(url, requestEntity, Void.class);
+        // Send DTO directly; no need to wrap with HttpEntity/headers.
+        restTemplate.postForObject(url, request, Void.class);
     }
 }
