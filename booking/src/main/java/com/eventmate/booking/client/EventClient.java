@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 public class EventClient {
 
-        private static final String BASE_URL = "http://localhost:8083/events";
+        private static final String BASE_URL = "http://event/events";
         private final RestTemplate restTemplate;
 
         public EventClient(RestTemplate restTemplate) {

@@ -8,7 +8,7 @@ import java.util.UUID;
 @Component
 public class AuthClient {
 
-    private static final String authServiceUrl = "http://localhost:8081/auth/update-tenant/";
+    private static final String authServiceUrl = "http://auth/auth/update-tenant/";
     private final RestTemplate restTemplate;
 
     public AuthClient(RestTemplate restTemplate) {

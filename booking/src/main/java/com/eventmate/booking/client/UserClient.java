@@ -10,7 +10,7 @@ import java.util.UUID;
 @Component
 public class UserClient {
 
-    private final String BASE_URL = "http://localhost:8081/auth/user";
+    private final String BASE_URL = "http://auth/auth/user";
     private final RestTemplate restTemplate;
 
     public UserClient(RestTemplate restTemplate) {

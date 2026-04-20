@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class PaymentClient {
 
-    private final String BASE_URL = "http://localhost:8085/payments";
+    private final String BASE_URL = "http://payment/payments";
     private final RestTemplate restTemplate;
 
     public PaymentClient(RestTemplate restTemplate) {
