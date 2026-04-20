@@ -1,6 +1,7 @@
 package com.eventmate.tenant.service;
 
 import com.eventmate.tenant.client.AuthClient;
+import com.eventmate.tenant.client.UpdateTenantRequest;
 import com.eventmate.tenant.dto.RegisterTenantRequest;
 import com.eventmate.tenant.dto.RegisterTenantResponse;
 import com.eventmate.tenant.exception.DuplicateEmailException;
@@ -59,7 +60,7 @@ public class TenantService {
         Tenant savedTenant = tenantRepository.save(tenant);
 
         if (request.getUserId() != null) {
-            authClient.addTenantToUser(request.getUserId(), savedTenant.getId());
+            authClient.addTenantToUser(request.getUserId(), new UpdateTenantRequest(savedTenant.getId()));
         }
 
         log.info("Tenant registered successfully with ID: {}", savedTenant.getId());
@@ -106,4 +107,3 @@ public class TenantService {
         return tenant.get();
     }
 }
-

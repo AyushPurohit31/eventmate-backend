@@ -1,25 +1,15 @@
 package com.eventmate.tenant.client;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@Component
-public class AuthClient {
+@FeignClient(name = "auth", path = "/auth")
+public interface AuthClient {
 
-    private static final String authServiceUrl = "http://auth/auth/update-tenant/";
-    private final RestTemplate restTemplate;
-
-    public AuthClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public void addTenantToUser(UUID userId, UUID tenantId){
-        String url = authServiceUrl + userId;
-        UpdateTenantRequest request = new UpdateTenantRequest(tenantId);
-
-        // Send DTO directly; no need to wrap with HttpEntity/headers.
-        restTemplate.postForObject(url, request, Void.class);
-    }
+    @PostMapping("/update-tenant/{userId}")
+    void addTenantToUser(@PathVariable("userId") UUID userId, @RequestBody UpdateTenantRequest request);
 }
