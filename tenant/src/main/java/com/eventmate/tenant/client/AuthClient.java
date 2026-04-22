@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.UUID;
 
-@FeignClient(name = "auth", path = "/auth")
+@FeignClient(name = "auth-service", path = "/api/auth")
 public interface AuthClient {
 
     @PostMapping("/update-tenant/{userId}")

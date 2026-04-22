@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/tenant")
+@RequestMapping("/api/tenant")
 public class TenantController {
 
     private static final Logger log = LoggerFactory.getLogger(TenantController.class);

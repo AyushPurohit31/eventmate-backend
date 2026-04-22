@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/venue")
+@RequestMapping("/api/venue")
 public class VenueController {
 
     private final VenueManagement venueManagement;
