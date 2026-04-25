@@ -22,7 +22,7 @@ public class PaymentController {
         this.paymentService = paymentService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/internal/create")
     public ResponseEntity<CreatePaymentResponse> createPayment(@RequestBody CreatePaymentRequest request) {
         log.info("Received request to create payment for booking_id {}", request.getBookingId());
         CreatePaymentResponse response = paymentService.createPayment(request);

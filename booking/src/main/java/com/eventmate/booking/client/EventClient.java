@@ -1,6 +1,7 @@
 package com.eventmate.booking.client;
 
 import com.eventmate.booking.client.dto.SeatHoldDetailsResponse;
+import com.eventmate.booking.config.FeignConfig;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -58,6 +58,14 @@ public class UserPrincipal implements UserDetails {
         return id;
     }
 
+    /**
+     * Email is still stored on the principal, but it is no longer used as the Spring Security
+     * "username" / principal name.
+     */
+    public String getEmail() {
+        return email;
+    }
+
     public Role getRole() {
         return role;
     }
@@ -68,7 +76,7 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return id != null ? id.toString() : null;
     }
 
     @Override
@@ -117,4 +125,3 @@ public class UserPrincipal implements UserDetails {
         this.firstName = firstName;
     }
 }
-

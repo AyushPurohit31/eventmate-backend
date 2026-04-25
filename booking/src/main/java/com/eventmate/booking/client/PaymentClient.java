@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @FeignClient(name = "payment-service", path = "/api/payments")
 public interface PaymentClient {
 
-    @PostMapping("/create")
+    @PostMapping("/internal/create")
     PaymentResponse createPayment(@RequestBody PaymentRequest request);
 }

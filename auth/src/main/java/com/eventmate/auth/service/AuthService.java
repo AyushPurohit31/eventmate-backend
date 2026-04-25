@@ -66,6 +66,8 @@ public class AuthService {
         // Generate tokens
         String accessToken = jwtUtil.generateAccessToken(
                 user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getRole(),
                 user.getTenantId()
@@ -90,7 +92,9 @@ public class AuthService {
         // Generate tokens
         String accessToken = jwtUtil.generateAccessToken(
                 userPrincipal.getId(),
-                userPrincipal.getUsername(),
+                userPrincipal.getFirstName(),
+                userPrincipal.getLastName(),
+                userPrincipal.getEmail(),
                 userPrincipal.getRole(),
                 userPrincipal.getTenantId()
         );
@@ -112,6 +116,8 @@ public class AuthService {
 
         String accessToken = jwtUtil.generateAccessToken(
                 user.getId(),
+                user.getFirstName(),
+                user.getLastName(),
                 user.getEmail(),
                 user.getRole(),
                 user.getTenantId()
@@ -129,7 +135,7 @@ public class AuthService {
             token = token.substring(7);
         }
 
-        UUID userId = jwtUtil.getUserIdFromToken(token);
+        UUID userId = UUID.fromString(jwtUtil.extractUserId(token));
         refreshTokenService.revokeAllUserTokens(userId);
 
         log.info("User logged out successfully");
@@ -146,7 +152,7 @@ public class AuthService {
 
         return new UserResponse(
                 userPrincipal.getId(),
-                userPrincipal.getUsername(),
+                userPrincipal.getEmail(),
                 userPrincipal.getRole(),
                 userPrincipal.getTenantId(),
                 userPrincipal.getFirstName(),

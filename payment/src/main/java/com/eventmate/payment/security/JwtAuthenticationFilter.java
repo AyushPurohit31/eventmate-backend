@@ -1,12 +1,12 @@
 package com.eventmate.payment.security;
 
-import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,50 +15,59 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
-    private final JwtUtil jwtUtil;
 
-    public JwtAuthenticationFilter(JwtUtil jutWtil) {
-        this.jwtUtil = jutWtil;
-    }
+    private static final String INTERNAL_TOKEN_HEADER = "X-Internal-Token";
+    private static final String EXPECTED_INTERNAL_TOKEN = "eventmate-secret";
+
+    @Value("${eventmate.security.enabled:true}")
+    private boolean securityEnabled;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-        String authHeader = request.getHeader("Authorization");
-        if(authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-
-            try {
-                if(jwtUtil.validateToken(token)){
-                    Claims claims = jwtUtil.extractAllClaims(token);
-                    String email = claims.getSubject();
-                    String role = claims.get("role", String.class);
-
-                    log.info("JWT Token Validated - Email: {}, Role: {}", email, role);
-
-                    UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-                            email, null, Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + role))
-                    );
-                    auth.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(auth);
-                    log.info("Authentication set in SecurityContext for user: {}", email);
-                } else {
-                    log.warn("Invalid JWT token");
-                }
-            } catch (Exception e) {
-                log.error("Error validating JWT token: {}", e.getMessage());
-            }
-        } else {
-            log.warn("No Authorization header or header does not start with Bearer");
+        if (!securityEnabled) {
+            filterChain.doFilter(request, response);
+            return;
         }
 
+        String internalToken = request.getHeader(INTERNAL_TOKEN_HEADER);
+
+        log.info("Incoming headers: X-Internal-Token={}, X-User-Id={}, X-User-Role={}",
+                request.getHeader("X-Internal-Token"),
+                request.getHeader("X-User-Id"),
+                request.getHeader("X-User-Role"));
+
+        if (!EXPECTED_INTERNAL_TOKEN.equals(internalToken)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        String userId = request.getHeader("X-User-Id");
+        String role = request.getHeader("X-User-Role");
+
+        if (userId != null && role != null) {
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userId,
+                    null,
+                    List.of(new SimpleGrantedAuthority("ROLE_" + role))
+            );
+            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            log.info("Auth set: principal={}, authorities={}, isAuthenticated={}",
+                    authentication.getName(),
+                    authentication.getAuthorities(),
+                    authentication.isAuthenticated());
+            log.debug("Gateway-trusted auth set for userId: {} with role: {}", userId, role);
+        }
+        log.info("Auth in context just before chain: {}",
+                SecurityContextHolder.getContext().getAuthentication());
         filterChain.doFilter(request, response);
     }
 }

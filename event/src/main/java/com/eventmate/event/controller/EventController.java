@@ -27,7 +27,7 @@ public class EventController {
         this.eventScheduleManagement = eventScheduleManagement;
     }
 
-    @GetMapping("/event")
+    @GetMapping
     public ResponseEntity<List<EventResponse>> getAllEvents() {
         log.info("Fetching all the events");
         List<EventResponse> events = eventManagement.getAllEventsResponse();
