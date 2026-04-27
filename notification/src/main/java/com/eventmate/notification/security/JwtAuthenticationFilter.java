@@ -23,7 +23,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private static final String INTERNAL_TOKEN_HEADER = "X-Internal-Token";
-    private static final String EXPECTED_INTERNAL_TOKEN = "eventmate-secret";
+
+    @Value("${eventmate.internal.token}")
+    private String expectedInternalToken;
 
     @Value("${eventmate.security.enabled:true}")
     private boolean securityEnabled;
@@ -38,7 +40,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         String internalToken = request.getHeader(INTERNAL_TOKEN_HEADER);
-        if (!EXPECTED_INTERNAL_TOKEN.equals(internalToken)) {
+        if (expectedInternalToken == null || !expectedInternalToken.equals(internalToken)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }

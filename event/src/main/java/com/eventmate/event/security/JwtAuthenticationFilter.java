@@ -25,10 +25,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     private static final String INTERNAL_TOKEN_HEADER = "X-Internal-Token";
-    private static final String EXPECTED_INTERNAL_TOKEN = "eventmate-secret";
 
     private static final String USER_ID_HEADER = "X-User-Id";
     private static final String ROLE_HEADER = "X-User-Role";
+
+    @Value("${eventmate.internal.token:AWFAWvsdcascawEFAWEEFDASDwadwdsafaewrrfewf}")
+    private String expectedInternalToken;
 
     @Value("${eventmate.security.enabled:true}")
     private boolean securityEnabled;
@@ -47,7 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.getHeader("X-User-Role"));
 
         String internalToken = request.getHeader(INTERNAL_TOKEN_HEADER);
-        if (!EXPECTED_INTERNAL_TOKEN.equals(internalToken)) {
+        if (expectedInternalToken == null || !expectedInternalToken.equals(internalToken)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             log.warn("Unauthorized request: missing or invalid internal token");
             return;

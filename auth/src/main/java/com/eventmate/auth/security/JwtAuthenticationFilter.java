@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,9 +25,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     // Internal headers
     private static final String INTERNAL_TOKEN_HEADER = "X-Internal-Token";
-    private static final String EXPECTED_INTERNAL_TOKEN = "eventmate-secret";
     private static final String USER_ID_HEADER = "X-User-Id";
     private static final String ROLE_HEADER = "X-User-Role";
+
+    @Value("${eventmate.internal.token}")
+    private String expectedInternalToken;
 
     // JWT header
     private static final String AUTHORIZATION_HEADER = "Authorization";
@@ -44,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             String internalToken = request.getHeader(INTERNAL_TOKEN_HEADER);
-            if (EXPECTED_INTERNAL_TOKEN.equals(internalToken)) {
+            if (expectedInternalToken != null && expectedInternalToken.equals(internalToken)) {
                 String userId = request.getHeader(USER_ID_HEADER);
                 String role = request.getHeader(ROLE_HEADER);
 

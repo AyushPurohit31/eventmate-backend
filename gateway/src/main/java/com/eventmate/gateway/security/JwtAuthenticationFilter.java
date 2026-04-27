@@ -28,6 +28,9 @@ public class JwtAuthenticationFilter implements WebFilter {
     @Value("${eventmate.security.enabled:true}")
     private boolean securityEnabled;
 
+    @Value("${eventmate.internal.token}")
+    private String internalToken;
+
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
     }
@@ -71,7 +74,7 @@ public class JwtAuthenticationFilter implements WebFilter {
                     .header("X-User-Email", email != null ? email : "")
                     .header("X-User-Role", role != null ? role : "")
                     .header("X-Tenant-Id", tenantId != null ? tenantId : "")
-                    .header("X-Internal-Token", "eventmate-secret")
+                    .header("X-Internal-Token", internalToken != null ? internalToken : "")
                     .build();
 
             ServerWebExchange mutatedExchange = exchange.mutate().request(mutatedRequest).build();
