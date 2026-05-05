@@ -37,6 +37,7 @@ dependencies {
 	implementation 'org.springframework.kafka:spring-kafka'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.3.0'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
 
 tasks.named('test') {

@@ -33,6 +33,7 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	runtimeOnly 'org.postgresql:postgresql:42.7.8'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.3.0'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
 
 tasks.named('test') {
