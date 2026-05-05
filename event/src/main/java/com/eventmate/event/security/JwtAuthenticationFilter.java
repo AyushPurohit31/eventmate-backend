@@ -29,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String USER_ID_HEADER = "X-User-Id";
     private static final String ROLE_HEADER = "X-User-Role";
 
-    @Value("${eventmate.internal.token:AWFAWvsdcascawEFAWEEFDASDwadwdsafaewrrfewf}")
+    @Value("${eventmate.internal.token}")
     private String expectedInternalToken;
 
     @Value("${eventmate.security.enabled:true}")

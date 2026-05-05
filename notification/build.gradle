@@ -36,6 +36,7 @@ dependencies {
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 	implementation 'org.springframework.boot:spring-boot-starter-mail:4.0.5'
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.3.0'
+	implementation 'io.github.cdimascio:dotenv-java:3.0.0'
 }
 
 tasks.named('test') {
