@@ -23,8 +23,6 @@ public class PaymentApplication {
 		dotenv.entries().forEach(entry ->
 			System.setProperty(entry.getKey(), entry.getValue())
 		);
-
 		SpringApplication.run(PaymentApplication.class, args);
 	}
-
 }

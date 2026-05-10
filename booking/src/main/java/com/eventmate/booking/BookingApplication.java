@@ -33,6 +33,8 @@ public class BookingApplication {
 			System.setProperty(entry.getKey(), entry.getValue())
 		);
 
+		System.out.println(">>> PROFILE: " + System.getProperty("SPRING_PROFILES_ACTIVE"));
+		System.out.println(">>> SECURITY: " + System.getProperty("SECURITY_ENABLED"));
 		SpringApplication.run(BookingApplication.class, args);
 	}
 

@@ -9,6 +9,8 @@ out/
 
 #env
 .env
+.env.docker
+.env.local
 
 # Gradle
 .gradle/
